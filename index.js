@@ -62,6 +62,43 @@ server.get("/api/cohorts/:id", (req, res) => {
         res.status(500).json(err);
       });
   });
+
+
+  server.put("/api/cohorts/:id", (req, res) => {
+    db("cohorts")
+      .where({ id: req.params.id })
+      .update(req.body)
+      .then(count => {
+        if (count > 0) {
+          res.status(200).json({
+            message: `${count} ${count > 1 ? "cohorts" : "cohort"} updated`
+          });
+        } else {
+          res.status(400).json({ message: "no such cohort exists" });
+        }
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
+
+  server.delete("/:id", (req, res) => {
+    db("cohorts")
+      .where({ id: req.params.id })
+      .del()
+      .then(count => {
+        if (count > 0) {
+          res.status(200).json({
+            message: `${count} ${count > 1 ? "cohorts" : "cohort"} deleted`
+          });
+        } else {
+          res.status(404).json({ message: "no such cohort exists" });
+        }
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
   
 
 
